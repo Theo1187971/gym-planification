@@ -13,14 +13,14 @@ npm install
 npm run dev
 ```
 
-### Backend
+### Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### database
+### Database
 ```bash
 source sql/init.sql;
 ```

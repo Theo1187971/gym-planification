@@ -26,6 +26,7 @@ db.Set = require('../models/Set')(sequelize, DataTypes);
 db.WeightSet = require('../models/WeightSet')(sequelize, DataTypes);
 db.TimeSet = require('../models/TimeSet')(sequelize, DataTypes);
 db.SetType = require('../models/SetType')(sequelize, DataTypes);
+db.Session = require('../models/Session')(sequelize, DataTypes);
 
 // Associations
 Object.values(db).forEach(model => {

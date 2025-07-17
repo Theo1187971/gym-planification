@@ -49,9 +49,38 @@ function cancelAddExercise() {
     exerciseRef.value = ref(null);
 }
 
-function createExercise() {
-    if(exerciseRef.value.exerciseList !== null) {
-        console.log(exerciseRef.value.exerciseList);
+async function createExercise() {
+    const exerciseList = exerciseRef.value.exerciseList;
+    
+    if (exerciseList && exerciseList.length > 0) {
+        const payload = {
+            userId: 1, // to get dynamically
+            exercises: exerciseList.map(ex => ({
+                name: ex.name,
+                description: ex.description,
+                bodyParts: ex.bodyParts,
+                categoryName: ex.category || null
+            }))
+        };
+
+        try {
+            const response = await fetch('http://localhost:3000/api/createExercises', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Exercises created successfully :', result);
+        } catch (error) {
+            console.error('Exercises creation error :', error);
+        }
     }
     dialogAddExercise.value = false;
 }

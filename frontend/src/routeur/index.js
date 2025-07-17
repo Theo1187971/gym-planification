@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import SignUpView from "@/views/SignUpView.vue";
 import LoginView from "@/views/LoginView.vue";
-import MainPage from "@/components/MainPage.vue";
+import MainPage from "@/views/MainPage.vue";
 
 
 const routes = [

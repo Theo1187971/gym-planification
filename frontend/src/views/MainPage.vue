@@ -32,12 +32,17 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import AddExercise from '../components/AddExercise.vue';
-import Workout from '@/components/Workout.vue';
+import AddExercise from '@/components/AddExercise.vue';
+import getSessionToken from '@/utils/auth.js';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const exerciseRef = ref(null);
 
 const dialogAddExercise = ref(false);
+
+
 
 function addExercise() {
     dialogAddExercise.value = true;
@@ -48,10 +53,45 @@ function cancelAddExercise() {
     exerciseRef.value = ref(null);
 }
 
-function createExercise() {
-    if(exerciseRef.value.exerciseList !== null) {
-        console.log(exerciseRef.value.exerciseList);
+async function createExercise() {
+    const exerciseList = exerciseRef.value.exerciseList;
+    const userToken = getSessionToken();
+    if(userToken !== null) { 
+        if (exerciseList && exerciseList.length > 0) {
+            const payload = {
+                sessionId: userToken,
+                exercises: exerciseList.map(ex => ({
+                    name: ex.name,
+                    description: ex.description,
+                    bodyParts: ex.bodyParts,
+                    categoryName: ex.category || null
+                }))
+            };
+            console.log(payload);
+
+            try {
+                const response = await fetch('http://localhost:3000/api/createExercises', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Exercises created successfully :', result);
+            } catch (error) {
+                console.error('Exercises creation error :', error);
+            }
+        }
+    } else {
+        router.push('/login');
     }
+    
     dialogAddExercise.value = false;
 }
 

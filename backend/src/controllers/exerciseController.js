@@ -1,24 +1,24 @@
 const db = require('../utils/dbConnexion');
-const User = db.User;
+const Session = db.Session;
 const BodyPart = db.BodyPart;
 const ExerciseDef = db.ExerciseDef;
 const ExercisesBodyParts = db.ExercisesBodyParts;
 const ExerciseCategory = db.ExerciseCategory;
 
 exports.createExercises = async (req, res) => {
-  const { exercises, userId } = req.body;
+  const { exercises, sessionId } = req.body;
 
   if (!Array.isArray(exercises) || exercises.length === 0) {
     return res.status(400).json({ message: "No exercises provided" });
   }
 
   try {
-    // Verifying the user exists
-    const existingUser = await User.findOne({
-        where: { user_id: userId }
+    // Verifying the session exists
+    const existingSession = await Session.findOne({
+        where: { session_id: sessionId }
       });
-    if (!existingUser) {
-      return res.status(400).json({ message: "User doesn't exist" });
+    if (!existingSession) {
+      return res.status(400).json({ message: "Session doesn't exist" });
     }
 
     const results = {
@@ -67,7 +67,7 @@ exports.createExercises = async (req, res) => {
           name,
           description,
           exercise_category_id: foundExerciseCategory.exercise_category_id,
-          user_id: userId
+          user_id: existingSession.user_id
 
         });
 

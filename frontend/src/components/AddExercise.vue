@@ -22,6 +22,15 @@
         />
 
         <v-select
+          v-model="category"
+          :items="categoryList"
+          label="Category"
+          variant="outlined"
+          color="orange"
+          chips
+        />
+
+        <v-select
           v-model="bodyParts"
           :items="bodyPartsList"
           label="Body Parts"
@@ -68,6 +77,7 @@
           <div class="d-flex justify-space-between align-center">
             <div class="text-body-2">
               {{ ex.description }} <br />
+              {{ ex.category }} <br />
               <span class="text-orange-darken-2">
                 ({{ ex.bodyParts.join(', ') }})
               </span>
@@ -109,6 +119,9 @@ const exerciseList = ref([])
 const bodyPartsList = ["Back", "Chest", "Legs", "Arms", "Shoulders"]
 const bodyParts = shallowRef([])
 
+const categoryList = ["Timed exercise", "Weight exercise"]
+const category = ref('')
+
 const dialog = ref(false);
 const exerciseToDeleteIndex = ref(null);
 
@@ -116,11 +129,13 @@ function addExercise() {
   exerciseList.value.push({
     name: exerciseName.value,
     description: exerciseDesc.value,
+    category: category.value,
     bodyParts: [...bodyParts.value]
   })
 
   exerciseName.value = ''
   exerciseDesc.value = ''
+  category.value = ''
   bodyParts.value = []
 }
 

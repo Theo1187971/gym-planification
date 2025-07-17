@@ -3,13 +3,11 @@ const { Model, DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
     class Workout extends Model {
         static associate(models) {
-            // A Workout belongs to a User
             Workout.belongsTo(models.User, {
                 foreignKey: 'user_id',
                 as: 'user',
             });
 
-            // A Workout has many Exercises
             Workout.hasMany(models.Exercise, {
                 foreignKey: 'workout_id',
                 as: 'exercises',

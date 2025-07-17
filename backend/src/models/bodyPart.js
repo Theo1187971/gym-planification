@@ -3,11 +3,11 @@ const { Model, DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   class BodyPart extends Model {
     static associate(models) {
-      BodyPart.belongsToMany(models.ExerciseDef, {
-        through: models.ExercisesBodyParts,
-        foreignKey: 'body_part_id',
-        otherKey: 'exercise_def_id',
-      });
+        BodyPart.belongsToMany(models.ExerciseDef, {
+            through: 'exercises_body_parts',
+            foreignKey: 'body_part_id',
+            otherKey: 'exercise_def_id',
+        });
     }
   }
 

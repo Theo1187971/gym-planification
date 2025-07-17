@@ -34,7 +34,6 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'users',
         timestamps: false,
     });
-
     User.associate = (models) => {
         User.hasMany(models.ExerciseDef, {
         foreignKey: "user_id",

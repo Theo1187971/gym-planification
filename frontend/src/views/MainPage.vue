@@ -1,4 +1,5 @@
-<template>
+    <template>
+
     <v-container class="py-8">
         <v-btn color="orange-darken-2" text @click="addExercise()">Add Exercise</v-btn>
 
@@ -14,7 +15,7 @@
 
                 <!-- Composant Exercise -->
                 <v-card-text>
-                    <Exercise ref="exerciseRef" />
+                    <AddExercise ref="exerciseRef" />
                 </v-card-text>
 
                 <!-- Boutons d'action -->
@@ -31,7 +32,9 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import Exercise from './Exercise.vue';
+import AddExercise from '../components/AddExercise.vue';
+import Workout from '@/components/Workout.vue';
+
 
 const exerciseRef = ref(null);
 

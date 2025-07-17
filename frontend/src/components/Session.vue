@@ -131,7 +131,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const SessionName = ref('')
 const SessionDesc = ref('')
@@ -139,7 +139,7 @@ const SessionList = ref([])
 
 const sportChoiceList = ["Fitness", "Biking", "Running", "Swimming"]
 const sportChoice = ref('')
-const exercisesChoiceList = ["Bench", "Squat", "Deadlift", "Shoulder Press"]
+const exercisesChoiceList = ref([])
 const exerciseChoice = ref('')
 
 const exercises = ref([])
@@ -156,24 +156,24 @@ function addInterval() {
   intervals.value.push({ duration: 5, pace: '' })
 }
 
-function addSession() {
+async function addSession() {
   const sessionData = {
     name: SessionName.value,
     description: SessionDesc.value,
     sportChoice: sportChoice.value,
-    exercises: exerciseChoice.value,
+    exercises: [],
     intervals: []
   }
 
   if (sportChoice.value === 'Fitness') {
-    sessionData.exercises = [...exercises.value]
+    sessionData.exercises = [...exercises.value];
+    await sendSessionToDatabase(sessionData);
   } else if (['Running', 'Biking', 'Swimming'].includes(sportChoice.value)) {
     sessionData.intervals = [...intervals.value]
   }
 
   SessionList.value.push(sessionData)
 
-  // Reset form
   SessionName.value = ''
   SessionDesc.value = ''
   sportChoice.value = ''
@@ -197,6 +197,35 @@ function deleteSession() {
 function cancelDelete() {
   SessionToDeleteIndex.value = null
   dialog.value = false
+}
+
+async function fetchExercises() {
+  try {
+    const response = await fetch('http://localhost:3000/api/exercises')
+    const data = await response.json()
+    exercisesChoiceList.value = data
+  } catch (error) {
+    console.error('Erreur lors du chargement des exercices :', error)
+  }
+}
+
+onMounted(() => {
+  fetchExercises()
+})
+
+async function sendSessionToDatabase(session) {
+  try {
+    const response = await fetch('http://localhost:3000/api/addFitnessSession', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(session)
+    });
+
+    if (!response.ok) throw new Error('Failed to save workout');
+    console.log('Workout saved successfully');
+  } catch (error) {
+    console.error('Error sending session to DB:', error);
+  }
 }
 
 defineExpose({

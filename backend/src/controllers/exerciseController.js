@@ -1,4 +1,3 @@
-
 const db = require('../utils/dbConnexion');
 const User = db.User;
 const BodyPart = db.BodyPart;

@@ -2,6 +2,8 @@ import {createRouter, createWebHistory} from "vue-router";
 import SignUpView from "@/views/SignUpView.vue";
 import LoginView from "@/views/LoginView.vue";
 import MainPage from "@/views/MainPage.vue";
+import SessionCreation from "@/components/SessionCreation.vue";
+
 
 const routes = [
     {
@@ -23,6 +25,11 @@ const routes = [
         path: '/signup',
         name: 'SignUp',
         component: SignUpView
+    },
+    {
+        path: '/sessionCreation',
+        name: 'sessionCreation',
+        component: SessionCreation
     }
 ];
 

@@ -14,5 +14,8 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.User = require('../models/users')(sequelize, DataTypes);
+db.BodyPart = require('../models/bodyPart')(sequelize, DataTypes);
+db.ExerciseDef = require('../models/exerciseDef')(sequelize, DataTypes);
+db.ExercisesBodyParts = require('../models/exercisesBodyPart')(sequelize, DataTypes);
 
 module.exports = db;

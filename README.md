@@ -11,6 +11,7 @@ cd backend
 cp .env.example .env # or create .env manually
 npm install
 npm run dev
+npm install mysql
 ```
 
 ### Frontend

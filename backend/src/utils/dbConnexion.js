@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const {Sequelize, DataTypes} = require('sequelize');
 
 const sequelize = new Sequelize('gymplanification', 'root', 'root', {
@@ -18,6 +20,12 @@ db.BodyPart = require('../models/BodyPart')(sequelize, DataTypes);
 db.ExerciseDef = require('../models/ExerciseDef')(sequelize, DataTypes);
 db.ExercisesBodyParts = require('../models/ExercisesBodyParts')(sequelize, DataTypes);
 db.ExerciseCategory = require('../models/ExerciseCategory')(sequelize, DataTypes);
+db.Exercise = require('../models/Exercise')(sequelize, DataTypes);
+db.Workout = require('../models/Workout')(sequelize, DataTypes);
+db.Set = require('../models/Set')(sequelize, DataTypes);
+db.WeightSet = require('../models/WeightSet')(sequelize, DataTypes);
+db.TimeSet = require('../models/TimeSet')(sequelize, DataTypes);
+db.SetType = require('../models/SetType')(sequelize, DataTypes);
 
 // Associations
 Object.values(db).forEach(model => {

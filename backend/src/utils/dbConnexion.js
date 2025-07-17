@@ -18,7 +18,7 @@ db.sequelize = sequelize;
 db.User = require('../models/Users')(sequelize, DataTypes);
 db.BodyPart = require('../models/BodyPart')(sequelize, DataTypes);
 db.ExerciseDef = require('../models/ExerciseDef')(sequelize, DataTypes);
-db.ExercisesBodyParts = require('../models/ExercisesBodyParts')(sequelize, DataTypes);
+db.ExercisesBodyParts = require('../models/ExercisesBodyPart')(sequelize, DataTypes);
 db.ExerciseCategory = require('../models/ExerciseCategory')(sequelize, DataTypes);
 db.Exercise = require('../models/Exercise')(sequelize, DataTypes);
 db.Workout = require('../models/Workout')(sequelize, DataTypes);
@@ -34,5 +34,6 @@ Object.values(db).forEach(model => {
         model.associate(db);
     }
 });
+
 
 module.exports = db;

@@ -1,6 +1,6 @@
 <template>
     
-    <h1>{{ exercise.exercise_def.name }}</h1>
+    <h1>{{ exercise.exerciseDefinition.name }}</h1>
     <p>{{ exercise.note }}</p>
 
     <v-table>
@@ -16,6 +16,8 @@
             <Set v-for="set in exercise.sets" :set="set"></Set>
         </tbody>
     </v-table>
+
+    <br>
 </template>
 
 <script setup>

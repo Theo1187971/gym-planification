@@ -185,6 +185,8 @@ export default {
           this.errorMessage = data.message;
         } else {
           this.errorMessage = '';
+          console.log(data.session_token)
+          localStorage.setItem('session_token', data.session_token);
           this.$router.push('/dashboard');
         }
       } catch (error) {

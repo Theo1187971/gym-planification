@@ -1,15 +1,17 @@
 const users = require("../models/users");
 
 exports.signup = (req, res) => {
-    const {name, email, password} = req.body;
-    if (users[name]) {
+    const {username, firstname, lastname, email, password} = req.body;
+    if (users[username]) {
         return res.status(400).send({message: `User with this username already exists`});
     }
     if (users[email]) {
         return res.status(400).send({message: `User with this email already exists`});
     }
-    users[name] = {
-        name: name,
+    users[email] = {
+        username: username,
+        firstname: firstname,
+        lastname: lastname,
         email: email,
         password: password // plus tard, ici on mettra le hash
     };
@@ -17,7 +19,9 @@ exports.signup = (req, res) => {
 
     return res.status(200).json({
         message: 'Account created successfully ! \n' +
-            'Username :' + users[email].name + ', Email' + users[email].email + ', Password:' + users[email].password + '});'
+            'FirstName :' + users[email].firstname + ', Lastname' + users[email].lastname +
+            ', Email' + users[email].email + ', Username' + users[email].username
+            + ', Password:' + users[email].password + '});'
     });
 }
 exports.login = (req, res) => {

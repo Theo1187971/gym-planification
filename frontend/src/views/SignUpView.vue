@@ -7,6 +7,12 @@
         <input type="text" id="usernameInput" ref="usernameInput" v-model="username" required>
       </div>
       <div class="form-group">
+        <label for="firstname">FirstName:</label>
+        <input type="text" id="firstnameInput" ref="firstnameInput" v-model="firstname" required>
+        <label for="lastname">Lastname:</label>
+        <input type="text" id="lastnameInput" ref="lastnameInput" v-model="lastname" required>
+      </div>
+      <div class="form-group">
         <label for="mailAddress">Email address:</label>
         <input type="text" id="emailInput" ref="emailInput" v-model="email" required>
       </div>
@@ -53,6 +59,8 @@ export default {
   data() {
     return {
       username: '',
+      firstname: '',
+      lastname: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -98,7 +106,9 @@ export default {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            name: this.username,
+            username: this.username,
+            firstname: this.firstname,
+            lastname: this.lastname,
             email: this.email,
             password: this.password
           })

@@ -15,7 +15,6 @@ exports.getAllGymExercises = async (req, res) => {
                     include: [
                         {
                             model: ExerciseCategory,
-                            as: 'category',
                             where: { name: 'Weight exercise' },
                             attributes: []
                         }

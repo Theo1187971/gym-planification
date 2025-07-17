@@ -22,19 +22,21 @@ CREATE TABLE workouts
     FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
-CREATE TABLE exercise_categories (
+CREATE TABLE exercise_categories
+(
     exercise_category_id INT PRIMARY KEY AUTO_INCREMENT,
-    name TEXT
+    name                 TEXT
 );
- 
-CREATE TABLE exercises_def (
-    exercise_def_id INT PRIMARY KEY AUTO_INCREMENT,
-    name TEXT,
-    description TEXT,
+
+CREATE TABLE exercises_def
+(
+    exercise_def_id      INT PRIMARY KEY AUTO_INCREMENT,
+    name                 TEXT,
+    description          TEXT,
     exercise_category_id INT,
-    user_id INT,
-    FOREIGN KEY (exercise_category_id) REFERENCES exercise_categories(exercise_category_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    user_id              INT,
+    FOREIGN KEY (exercise_category_id) REFERENCES exercise_categories (exercise_category_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
 CREATE TABLE body_parts
@@ -94,4 +96,13 @@ CREATE TABLE weight_sets
     repetitions INT,
     weight      FLOAT,
     FOREIGN KEY (set_id) REFERENCES sets (set_id)
+);
+
+CREATE TABLE sessions
+(
+    session_id VARCHAR(64) PRIMARY KEY,
+    user_id    INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    expires_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );

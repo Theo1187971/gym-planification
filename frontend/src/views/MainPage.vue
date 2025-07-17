@@ -31,7 +31,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import Exercise from './Exercise.vue';
+import Exercise from '../components/Exercise.vue';
 
 const exerciseRef = ref(null);
 

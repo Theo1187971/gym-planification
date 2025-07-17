@@ -23,6 +23,9 @@ INSERT INTO exercises_def (name, description) VALUES
     ('Biking', 'Endurance exercise using a bike'),
     ('Running', 'Cardio exercise requiring to have legs and shoes');
 
+INSERT INTO exercises_def (name, description, user_id) VALUES
+    ('Biking with hands', 'Very common exercise which is basic biking but with hands', 2);
+
 INSERT INTO body_parts (name) VALUES
     ('Chest'),
     ('Back'),
@@ -43,7 +46,9 @@ INSERT INTO exercises_body_parts VALUES
     (9, 3),
     (10, 6),
     (10, 3),
-    (11, 6);
+    (11, 6),
+    (12, 5),
+    (12, 6);
 
 INSERT INTO exercises (note, order_nr, exercise_def_id, workout_id) VALUES
     (NULL, 1, 1, 1),
@@ -55,7 +60,7 @@ INSERT INTO exercises (note, order_nr, exercise_def_id, workout_id) VALUES
     ("Felt light", 1, 7, 3),
     ("Had a cramp", 2, 8, 3),
     ("Tore my achilles", 3, 9, 3),
-    ("Low intensity", 1, 10, 4);
+    ("Low intensity", 1, 12, 4);
 
 
 INSERT INTO set_types (name) VALUES

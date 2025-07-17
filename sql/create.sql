@@ -23,7 +23,9 @@ CREATE TABLE workouts (
 CREATE TABLE exercises_def (
     exercise_def_id INT PRIMARY KEY AUTO_INCREMENT,
     name TEXT,
-    description TEXT
+    description TEXT,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
  
 CREATE TABLE body_parts (

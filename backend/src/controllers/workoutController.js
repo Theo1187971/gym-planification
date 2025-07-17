@@ -6,6 +6,7 @@ const Set = db.Set;
 const WeightSet = db.WeightSet;
 const TimeSet = db.TimeSet;
 const SetType = db.SetType;
+const ExerciseCategory = db.ExerciseCategory;
 
 exports.getWorkout = async (req, res) => {
     const workoutId = req.params.workout_id;
@@ -21,6 +22,9 @@ exports.getWorkout = async (req, res) => {
                     {
                         model: ExerciseDef,
                         as: 'exerciseDefinition',
+                        include: [
+                            { model: ExerciseCategory, as: "exerciseCategory"}
+                        ]
                     },
                     {
                     model: Set,

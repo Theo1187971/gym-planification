@@ -1,19 +1,33 @@
 <template>
-    
     <h1>{{ exercise.exerciseDefinition.name }}</h1>
     <p>{{ exercise.note }}</p>
 
-    <v-table>
+    <v-table v-if="weightExercise">
         <thead>
-          <tr>
-            <th>Type</th>
-            <th>Note</th>
-            <th>Reps</th>
-            <th>Weight (kg)</th>
-          </tr>
+            <tr>
+                <th>Type</th>
+                <th>Note</th>
+                <th>Reps</th>
+                <th>Weight (kg)</th>
+            </tr>
         </thead>
         <tbody>
-            <Set v-for="set in exercise.sets" :set="set"></Set>
+            <Set v-for="set in exercise.sets" :set="set" type="weight"></Set>
+        </tbody>
+    </v-table>
+
+    <v-table v-else>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Note</th>
+                <th>Minutes</th>
+                <th>Value</th>
+                <th>Unit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <Set v-for="set in exercise.sets" :set="set" type="time"></Set>
         </tbody>
     </v-table>
 
@@ -21,11 +35,17 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import Set from './Set.vue'
-defineProps({
+
+const props = defineProps({
   exercise: {
     type: Object,
     required: true,
   }
 })
+
+const weightExercise = computed(() =>
+    props.exercise.exerciseDefinition.exerciseCategory.name === "Weight exercise"
+)
 </script>

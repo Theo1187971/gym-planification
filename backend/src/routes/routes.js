@@ -7,6 +7,7 @@ const sessionController = require('../controllers/sessionCreationController');
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.post('/createExercises', exerciseController.createExercises);
-router.get('/exercises', sessionController.getAllExercises);
+router.get('/exercises', sessionController.getAllGymExercises);
+router.post('/addFitnessSession', sessionController.createWorkoutWithExercises);
 
 module.exports = router;

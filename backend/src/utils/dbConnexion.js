@@ -23,6 +23,8 @@ db.Set = require('../models/Set')(sequelize, DataTypes);
 db.SetType = require('../models/SetType')(sequelize, DataTypes);
 db.TimeSet = require('../models/TimeSet')(sequelize, DataTypes);
 db.WeightSet = require('../models/WeightSet')(sequelize, DataTypes);
+db.ExerciseCategory = require('../models/ExerciseCategory')(sequelize, DataTypes);
+
 
 Object.keys(db).forEach(modelName => {
     if (db[modelName].associate) {

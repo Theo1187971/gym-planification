@@ -32,7 +32,7 @@
 
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import AddExercise from '@/components/AddExercise.vue';
 import getSessionToken from '@/utils/auth.js';
 import Workout from '@/components/Workout.vue';

@@ -1,56 +1,119 @@
 <template>
-  <div class="signup-container">
-    <h2 id="signUpTitle">Create your locker</h2>
-    <form @submit.prevent="handleSignUp">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="usernameInput" ref="usernameInput" v-model="username" required>
-      </div>
-      <div class="form-group">
-        <label for="firstname">FirstName:</label>
-        <input type="text" id="firstnameInput" ref="firstnameInput" v-model="firstname" required>
-        <label for="lastname">Lastname:</label>
-        <input type="text" id="lastnameInput" ref="lastnameInput" v-model="lastname" required>
-      </div>
-      <div class="form-group">
-        <label for="mailAddress">Email address:</label>
-        <input type="text" id="emailInput" ref="emailInput" v-model="email" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input
-            type="password"
-            id="passwordInput"
+  <v-container class="signup-container" max-width="600px">
+    <v-card class="pa-4">
+      <v-card-title class="justify-center">
+        <h2 id="signUpTitle">Create your locker</h2>
+      </v-card-title>
+
+      <v-form @submit.prevent="handleSignUp" ref="form">
+        <v-text-field
+            label="Username"
+            v-model="username"
+            :rules="[v => !!v || 'Username is required']"
+            ref="usernameInput"
+            required
+        />
+
+        <v-text-field
+            label="First name"
+            v-model="firstname"
+            :rules="[v => !!v || 'First name is required']"
+            ref="firstnameInput"
+            required
+        />
+
+        <v-text-field
+            label="Last name"
+            v-model="lastname"
+            :rules="[v => !!v || 'Last name is required']"
+            ref="lastnameInput"
+            required
+        />
+
+        <v-text-field
+            label="Email address"
+            v-model="email"
+            :rules="[v => !!v || 'Email is required']"
+            ref="emailInput"
+            required
+        />
+
+        <v-text-field
+            label="Password"
             v-model="password"
-            required
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showPassword ? 'text' : 'password'"
+            @click:append="showPassword = !showPassword"
             ref="passwordInput"
-        />
-      </div>
-      <div class="form-group">
-        <label for="password">Confirm password:</label>
-        <input
-            type="password"
-            id="confirmPasswordInput"
-            v-model="confirmPassword"
             required
-            ref="confirmPasswordInput"
         />
-      </div>
-      <ul class="password-checks">
-        <p> You password must contains : </p>
-        <li :class="{ valid: passwordChecks.length }">At least 8 characters</li>
-        <li :class="{ valid: passwordChecks.hasUppercase }">At least one uppercase letter</li>
-        <li :class="{ valid: passwordChecks.hasLowercase }">At least one lowercase letter</li>
-        <li :class="{ valid: passwordChecks.hasDigit }">At least one number</li>
-        <li :class="{ valid: passwordChecks.hasSpecialChar }">At least one special character</li>
-      </ul>
-      <button type="submit" :disabled="!isPasswordValid" id="signUpButton">Sign Up</button>
-      <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
-      <h3 id="backToLoginLink">
-        <router-link to="/login">← Back to login</router-link>
-      </h3>
-    </form>
-  </div>
+
+        <v-text-field
+            label="Confirm password"
+            v-model="confirmPassword"
+            :append-icon="showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showConfirmPassword ? 'text' : 'password'"
+            @click:append="showConfirmPassword = !showConfirmPassword"
+            ref="confirmPasswordInput"
+            required
+        />
+
+        <v-list dense class="mt-3">
+          <v-list-item>
+            <v-list-item-content>
+              <strong>Password must contain:</strong>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+              v-for="(check, label) in passwordChecks"
+              :key="label"
+          >
+            <v-list-item-content>
+              <v-icon :color="check ? 'green' : 'red'" small>
+                {{ check ? 'mdi-check-circle' : 'mdi-close-circle' }}
+              </v-icon>
+              <span class="ml-2">
+                {{
+                  label === 'length'
+                      ? 'At least 8 characters'
+                      : label === 'hasUppercase'
+                          ? 'At least one uppercase letter'
+                          : label === 'hasLowercase'
+                              ? 'At least one lowercase letter'
+                              : label === 'hasDigit'
+                                  ? 'At least one number'
+                                  : 'At least one special character'
+                }}
+              </span>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+
+        <v-btn
+            type="submit"
+            color="primary"
+            :disabled="!isPasswordValid"
+            class="mt-4"
+            block
+        >
+          Sign Up
+        </v-btn>
+
+        <v-alert
+            v-if="errorMessage"
+            type="error"
+            dense
+            class="mt-3"
+        >
+          {{ errorMessage }}
+        </v-alert>
+
+        <div class="text-center mt-4" id="backToLoginLink">
+          <router-link to="/login">← Back to login</router-link>
+        </div>
+      </v-form>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -64,6 +127,8 @@ export default {
       email: '',
       password: '',
       confirmPassword: '',
+      showPassword: false,
+      showConfirmPassword: false,
       errorMessage: ''
     };
   },
@@ -92,13 +157,13 @@ export default {
     async handleSignUp() {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(this.email)) {
-        alert('Please enter a valid email address');
         this.$refs.emailInput.focus();
+        alert('Please enter a valid email address');
         return;
       }
       if (this.password !== this.confirmPassword) {
-        alert('The passwords you entered do not match. Please try again.');
         this.$refs.passwordInput.focus();
+        alert('The passwords you entered do not match. Please try again.');
         return;
       }
       try {
@@ -120,7 +185,7 @@ export default {
           this.errorMessage = data.message;
         } else {
           this.errorMessage = '';
-          // this.$router.push('/dashboard'); Redirection
+          // this.$router.push('/dashboard');
         }
       } catch (error) {
         this.errorMessage = 'Server error. Please try again later.';
@@ -128,88 +193,16 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
-#signUpTitle {
-  text-align: center;
-}
-
-.password-checks {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 16px;
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
-  font-size: 0.8em;
-}
-
-.password-checks li {
-  color: #d11010;
-  margin-bottom: 4px;
-  font-weight: bold;
-  padding: 5px;
-}
-
-.password-checks p {
-  grid-column: 1 / -1;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.password-checks li.valid {
-  color: #15c615;
-  font-weight: bold;
-}
-
-#backToLoginLink {
-  font-size: 90%;
-  margin-top: 2%;
-}
-
 .signup-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 50px;
 }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-#signUpButton {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-}
-
-#signUpButton:disabled {
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
-  opacity: 0.7;
+#backToLoginLink a {
+  text-decoration: none;
+  color: #1976d2;
 }
 </style>
-

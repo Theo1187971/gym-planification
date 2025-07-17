@@ -1,38 +1,86 @@
 <template>
-  <div class="login-container">
-    <h2 id="loginTitle">Open your locker</h2>
-    <form @submit.prevent="handleLogin">
-      <div class="form-group">
-        <label for="email">Email Address:</label>
-        <input type="text" id="emailInput" ref="emailInput" v-model="email" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input
-            type="password"
-            id="passwordInput"
-            v-model="password"
-            required
-            ref="passwordInput"
-        />
-        <ul class="password-checks">
-          <p> You password must contains : </p>
-          <li :class="{ valid: passwordChecks.length }">At least 8 characters</li>
-          <li :class="{ valid: passwordChecks.hasUppercase }">At least one uppercase letter</li>
-          <li :class="{ valid: passwordChecks.hasLowercase }">At least one lowercase letter</li>
-          <li :class="{ valid: passwordChecks.hasDigit }">At least one number</li>
-          <li :class="{ valid: passwordChecks.hasSpecialChar }">At least one special character</li>
-        </ul>
-      </div>
-      <button type="submit" :disabled="!isPasswordValid" id="loginButton">Login</button>
-      <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
-      <h3 id="createAccountLink">
-        Not registered yet ?
-        <router-link to="/signup">Create your locker by clicking here</router-link>
-      </h3>
+  <v-container class="login-container" max-width="600px">
+    <v-card class="pa-4">
+      <v-card-title class="justify-center">
+        <h2 id="loginTitle">Open your locker</h2>
+      </v-card-title>
 
-    </form>
-  </div>
+      <v-form @submit.prevent="handleLogin" ref="form">
+        <v-text-field
+            label="Email Address"
+            v-model="email"
+            :rules="[v => !!v || 'Email is required']"
+            ref="emailInput"
+            required
+        />
+
+        <v-text-field
+            label="Password"
+            v-model="password"
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="showPassword ? 'text' : 'password'"
+            @click:append="showPassword = !showPassword"
+            ref="passwordInput"
+            required
+        />
+
+        <v-list dense class="mt-3">
+          <v-list-item>
+            <v-list-item-content>
+              <strong>Password must contain:</strong>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+              v-for="(check, label) in passwordChecks"
+              :key="label"
+          >
+            <v-list-item-content>
+              <v-icon :color="check ? 'green' : 'red'" small>
+                {{ check ? 'mdi-check-circle' : 'mdi-close-circle' }}
+              </v-icon>
+              <span class="ml-2">
+                {{
+                  label === 'length'
+                      ? 'At least 8 characters'
+                      : label === 'hasUppercase'
+                          ? 'At least one uppercase letter'
+                          : label === 'hasLowercase'
+                              ? 'At least one lowercase letter'
+                              : label === 'hasDigit'
+                                  ? 'At least one number'
+                                  : 'At least one special character'
+                }}
+              </span>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+
+        <v-btn
+            type="submit"
+            color="primary"
+            :disabled="!isPasswordValid"
+            class="mt-4"
+            block
+        >
+          Login
+        </v-btn>
+
+        <v-alert
+            v-if="errorMessage"
+            type="error"
+            dense
+            class="mt-3"
+        >
+          {{ errorMessage }}
+        </v-alert>
+
+        <div class="text-center mt-4" id="createAccountLink">
+          Not registered yet?
+          <router-link to="/signup">Create your locker by clicking here</router-link>
+        </div>
+      </v-form>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -42,6 +90,7 @@ export default {
     return {
       email: '',
       password: '',
+      showPassword: false,
       errorMessage: ''
     };
   },
@@ -90,7 +139,7 @@ export default {
           this.errorMessage = data.message;
         } else {
           this.errorMessage = '';
-          // this.$router.push('/dashboard'); Redirection
+          // this.$router.push('/dashboard');
         }
       } catch (error) {
         this.errorMessage = 'Server error. Please try again later.';
@@ -98,7 +147,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -111,74 +160,12 @@ export default {
   margin-top: 2%;
 }
 
-.password-checks {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 16px;
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
-  font-size: 0.8em;
-}
-
-.password-checks li {
-  color: #d11010;
-  margin-bottom: 4px;
-  font-weight: bold;
-  padding: 5px;
-}
-
-.password-checks p {
-  grid-column: 1 / -1;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.password-checks li.valid {
-  color: #15c615;
-  font-weight: bold;
-}
-
 .login-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 50px;
 }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-#loginButton {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-}
-
-#loginButton:disabled {
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
-  opacity: 0.7;
+#createAccountLink a {
+  text-decoration: none;
+  color: #1976d2;
 }
 </style>

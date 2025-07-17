@@ -43,7 +43,7 @@ function addExercise() {
 
 function cancelAddExercise() {
     dialogAddExercise.value = false;
-    exerciseRef = ref(null);
+    exerciseRef.value = ref(null);
 }
 
 function createExercise() {

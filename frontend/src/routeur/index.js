@@ -1,9 +1,18 @@
+import {createRouter, createWebHistory} from "vue-router";
+import SignUpView from "@/views/SignUpView.vue";
+import LoginView from "@/views/LoginView.vue";
+import MainPage from "@/views/MainPage.vue";
 
-
-/*const routes = [
+const routes = [
     {
         path: '/',
-        redirect: '/login'
+        redirect: '/dashboard',
+    },
+    {
+        path: '/dashboard',
+        name: 'Dashboard',
+        component: MainPage,
+        meta: {requiresAuth: true}
     },
     {
         path: '/login',
@@ -20,6 +29,17 @@
 const router = createRouter({
     history: createWebHistory(),
     routes
-});*/
+});
 
-//export default router;
+router.beforeEach((to, from, next) => {
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    const isAuthenticated = !!localStorage.getItem('session_token');
+
+    if (requiresAuth && !isAuthenticated) {
+        next('/login');
+    } else {
+        next();
+    }
+});
+
+export default router;

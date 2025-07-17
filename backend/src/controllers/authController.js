@@ -10,7 +10,6 @@ exports.signup = async (req, res) => {
     try {
         const existingUser = await User.findOne({
             where: {
-                // Sequelize OR condition
                 [db.Sequelize.Op.or]: [{username: username}, {mail: email}]
             }
         });

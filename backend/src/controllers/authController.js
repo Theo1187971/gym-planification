@@ -1,35 +1,47 @@
-const users = require("../models/users");
+const crypto = require("../utils/hash");
+const db = require("../utils/dbConnexion");
 
 exports.signup = (req, res) => {
     const {username, firstname, lastname, email, password} = req.body;
-    if (users[username]) {
-        return res.status(400).send({message: `User with this username already exists`});
-    }
-    if (users[email]) {
-        return res.status(400).send({message: `User with this email already exists`});
-    }
-    users[email] = {
-        username: username,
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-        password: password // plus tard, ici on mettra le hash
-    };
+    const hashedPassword = crypto.hashPassword(password);
 
+    db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
+        if (err) return res.status(500).json({message: 'Database error ' + err});
+        if (results.length > 0) {
+            return res.status(400).json({message: 'User already exists'});
+        }
 
-    return res.status(200).json({
-        message: 'Account created successfully ! \n' +
-            'FirstName :' + users[email].firstname + ', Lastname' + users[email].lastname +
-            ', Email' + users[email].email + ', Username' + users[email].username
-            + ', Password:' + users[email].password + '});'
+        db.query(
+            'INSERT INTO users (username,first_name, last_name, mail, password) VALUES (?, ?, ?, ?, ?)',
+            [username, firstname, lastname, email, hashedPassword],
+            (err2) => {
+                if (err2) return res.status(500).json({message: 'Insertion error ' + err2});
+
+                res.status(200).json({
+                    message: 'Account created successfully ! \n' +
+                        'FirstName :' + firstname + ', Lastname' + lastname +
+                        ', Email' + email + ', Username' + username
+                        + ', Password:' + hashedPassword + '});'
+                });
+            }
+        );
     });
 }
 exports.login = (req, res) => {
     const {email, password} = req.body;
+    const hashedPassword = crypto.hashPassword(password);
 
-    if (!users[email] || users[email].password !== password) {
-        return res.status(401).json({message: 'Invalid email or password'});
-    }
+    db.query(
+        'SELECT * FROM users WHERE mail = ? AND password = ?',
+        [email, hashedPassword],
+        (err, results) => {
+            if (err) return res.status(500).json({message: 'Database error'});
 
-    return res.status(200).json({message: 'Login successful'});
+            if (results.length === 0) {
+                return res.status(401).json({message: 'Invalid email or password'});
+            }
+
+            res.status(200).json({message: 'Login successful for ' + email});
+        }
+    );
 };

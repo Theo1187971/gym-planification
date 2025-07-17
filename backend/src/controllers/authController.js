@@ -1,35 +1,57 @@
-const users = require("../models/users");
+const crypto = require('../utils/hash');
+const db = require('../utils/dbConnexion');
+const User = db.User;
 
-exports.signup = (req, res) => {
+
+exports.signup = async (req, res) => {
     const {username, firstname, lastname, email, password} = req.body;
-    if (users[username]) {
-        return res.status(400).send({message: `User with this username already exists`});
-    }
-    if (users[email]) {
-        return res.status(400).send({message: `User with this email already exists`});
-    }
-    users[email] = {
-        username: username,
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-        password: password // plus tard, ici on mettra le hash
-    };
+    const hashedPassword = crypto.hashPassword(password);
 
+    try {
+        const existingUser = await User.findOne({
+            where: {
+                [db.Sequelize.Op.or]: [{username: username}, {mail: email}]
+            }
+        });
+        if (existingUser) {
+            return res.status(400).json({message: 'User with this username or email already exists'});
+        }
+        const newUser = await User.create({
+            username: username, first_name: firstname, last_name: lastname, mail: email, password: hashedPassword,
+        });
+        res.status(201).json({
+            message: 'Account created successfully!', user: {
+                id: newUser.user_id, username: newUser.username, email: newUser.mail,
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Database error: ' + error.message});
+    }
+};
 
-    return res.status(200).json({
-        message: 'Account created successfully ! \n' +
-            'FirstName :' + users[email].firstname + ', Lastname' + users[email].lastname +
-            ', Email' + users[email].email + ', Username' + users[email].username
-            + ', Password:' + users[email].password + '});'
-    });
-}
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
     const {email, password} = req.body;
+    const hashedPassword = crypto.hashPassword(password);
 
-    if (!users[email] || users[email].password !== password) {
-        return res.status(401).json({message: 'Invalid email or password'});
+    try {
+        const user = await User.findOne({
+            where: {
+                mail: email, password: hashedPassword,
+            }
+        });
+
+        if (!user) {
+            return res.status(401).json({message: 'Invalid email or password'});
+        }
+
+        res.status(200).json({
+            message: 'Login successful for ' + email, user: {
+                id: user.user_id, username: user.username, email: user.mail,
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Database error: ' + error.message});
     }
-
-    return res.status(200).json({message: 'Login successful'});
 };

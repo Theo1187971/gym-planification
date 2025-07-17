@@ -139,7 +139,7 @@ export default {
           this.errorMessage = data.message;
         } else {
           this.errorMessage = '';
-          // this.$router.push('/dashboard');
+          this.$router.push('/dashboard');
         }
       } catch (error) {
         this.errorMessage = 'Server error. Please try again later.';

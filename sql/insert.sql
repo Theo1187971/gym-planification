@@ -1,19 +1,22 @@
 USE gymplanification;
 
-INSERT INTO users (username, first_name, last_name, mail, password) VALUES
-    ('user1', 'John', 'Smith', 'user1@gmail.com', 'bba4ace308cf9f024f698c70cee199a04cb3e7e8901f102feea7044f5e692976'),
-    ('matheoLeBg72', 'Matheo', 'Esquivel', 'matheo@outlook.fr', 'e31e78d3d3446a7f5b6b1d0f86dcde2bd14d7f3b49a522ea673791e9f2f4d2c2');
+INSERT INTO users (username, first_name, last_name, mail, password)
+VALUES ('UserTest', 'John', 'Doe', 'user@test.com',
+        '199c55dcd0fc08f84635221ecb37f06c1ccf88006d8b74f19ef4688bd508885b'),    #Test!123
+       ('Admin', 'Admin', 'Admin', 'admin@outlook.fr',
+        '1bb6e3a85ddd637bddad86d6a5b5ee5252fb1bf1d8a3134ef6ee03ca295fce1c'),   #Admin!123
+       ('mdoguet', 'Matheo', 'DOGUET', 'mdoguet@esiea.fr',
+        'acfd4c67e24dc5084587daad9425c652a4a03c113c706d4ed80f062152bcb083');    #Matheo!123
 
-INSERT INTO workouts (name, note, user_id) VALUES
-    ('Push', 'Monday Push Workout', 1),
-    ('Pull', NULL, 2),
-    ('Legs', 'Boring leg day', 1),
-    ('Cardio', 'Easy endurance day', 2);
+INSERT INTO workouts (name, note, user_id)
+VALUES ('Push', 'Monday Push Workout', 1),
+       ('Pull', NULL, 2),
+       ('Legs', 'Boring leg day', 1),
+       ('Cardio', 'Easy endurance day', 2);
 
 INSERT INTO exercise_categories (name) VALUES
     ('Timed exercise'),
     ('Weight exercise');
-
 
 INSERT INTO exercises_def (name, description, exercise_category_id) VALUES
     ('Bench Press', 'Exercise done with a barbell lying on a flat bench', 2),
@@ -31,13 +34,13 @@ INSERT INTO exercises_def (name, description, exercise_category_id) VALUES
 INSERT INTO exercises_def (name, description, exercise_category_id, user_id) VALUES
     ('Biking with hands', 'Very common exercise which is basic biking but with hands', 1, 2);
 
-INSERT INTO body_parts (name) VALUES
-    ('Chest'),
-    ('Back'),
-    ('Legs'),
-    ('Shoulders'),
-    ('Arms'),
-    ('Cardio');
+INSERT INTO body_parts (name)
+VALUES ('Chest'),
+       ('Back'),
+       ('Legs'),
+       ('Shoulders'),
+       ('Arms'),
+       ('Cardio');
 
 INSERT INTO exercises_body_parts VALUES
     (1, 1),
@@ -67,40 +70,39 @@ INSERT INTO exercises (note, order_nr, exercise_def_id, workout_id) VALUES
     ("Tore my achilles", 3, 9, 3),
     ("Low intensity", 1, 12, 4);
 
+INSERT INTO set_types (name)
+VALUES ("Warm Up"),
+       ("Drop Set"),
+       ("Working Set");
 
-INSERT INTO set_types (name) VALUES
-    ("Warm Up"),
-    ("Drop Set"),
-    ("Working Set");
+INSERT INTO sets (note, set_type_id, exercise_id)
+VALUES (NULL, 1, 1),
+       (NULL, 3, 1),
+       (NULL, 3, 2),
+       (NULL, 2, 2),
+       (NULL, 3, 3),
+       (NULL, 3, 4),
+       (NULL, 3, 5),
+       (NULL, 1, 6),
+       (NULL, 3, 7),
+       (NULL, 3, 8),
+       (NULL, 3, 9),
+       (NULL, 3, 10),
+       (NULL, 3, 10);
 
-INSERT INTO sets (note, set_type_id, exercise_id) VALUES
-    (NULL, 1, 1),
-    (NULL, 3, 1),
-    (NULL, 3, 2),
-    (NULL, 2, 2),
-    (NULL, 3, 3),
-    (NULL, 3, 4),
-    (NULL, 3, 5),
-    (NULL, 1, 6),
-    (NULL, 3, 7),
-    (NULL, 3, 8),
-    (NULL, 3, 9),
-    (NULL, 3, 10),
-    (NULL, 3, 10);
+INSERT INTO weight_sets (set_id, repetitions, weight)
+VALUES (1, 12, 42.5),
+       (2, 8, 70.0),
+       (3, 15, 25.0),
+       (4, 12, 20.0),
+       (5, 10, 6.0),
+       (6, 8, 0.0),
+       (7, 10, 12.5),
+       (8, 10, 5.0),
+       (9, 6, 90.0),
+       (10, 10, 25.0),
+       (11, 4, 20.0);
 
-INSERT INTO weight_sets (set_id, repetitions, weight) VALUES
-    (1, 12, 42.5),
-    (2, 8, 70.0),
-    (3, 15, 25.0),
-    (4, 12, 20.0),
-    (5, 10, 6.0),
-    (6, 8, 0.0),
-    (7, 10, 12.5),
-    (8, 10, 5.0),
-    (9, 6, 90.0),
-    (10, 10, 25.0),
-    (11, 4, 20.0);
-
-INSERT INTO time_sets (set_id, minutes, value, unit) VALUES
-    (12, 20, 120, 'Watts'),
-    (13, 10, 5, 'km');
+INSERT INTO time_sets (set_id, minutes, value, unit)
+VALUES (12, 20, 120, 'Watts'),
+       (13, 10, 5, 'km');

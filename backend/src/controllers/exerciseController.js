@@ -18,7 +18,7 @@ exports.createExercises = async (req, res) => {
     const existingSession = await Session.findOne({
         where: { session_id: sessionId }
       });
-    if (!existingUser) {
+    if (!existingSession) {
       return res.status(400).json({ message: "Session doesn't exist" });
     }
 

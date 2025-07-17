@@ -1,8 +1,8 @@
 USE gymplanification;
 
 INSERT INTO users (username, first_name, last_name, mail, password) VALUES
-    ('user1', 'John', 'Smith', 'user1@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-    ('matheoLeBg72', 'Matheo', 'Esquivel', 'matheo@outlook.fr', '2c7580c4cf1907a37161904a5869f026dda5a97e653b64527eb146275b33aca9');
+    ('user1', 'John', 'Smith', 'user1@gmail.com', 'bba4ace308cf9f024f698c70cee199a04cb3e7e8901f102feea7044f5e692976'),
+    ('matheoLeBg72', 'Matheo', 'Esquivel', 'matheo@outlook.fr', 'e31e78d3d3446a7f5b6b1d0f86dcde2bd14d7f3b49a522ea673791e9f2f4d2c2');
 
 INSERT INTO workouts (name, note, user_id) VALUES
     ('Push', 'Monday Push Workout', 1),

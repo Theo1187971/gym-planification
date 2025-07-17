@@ -58,7 +58,9 @@ CREATE TABLE sets (
     set_id INT PRIMARY KEY AUTO_INCREMENT,
     note TEXT,
     set_type_id INT,
-    exercise_id INT
+    exercise_id INT,
+    FOREIGN KEY (set_type_id) REFERENCES set_types(set_type_id),
+    FOREIGN KEY (exercise_id) REFERENCES exercises(exercise_id)
 );
  
 CREATE TABLE time_sets (

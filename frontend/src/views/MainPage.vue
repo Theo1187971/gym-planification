@@ -1,5 +1,5 @@
-    <template>
 
+<template>
     <v-container class="py-8">
         <v-btn color="orange-darken-2" text @click="addExercise()">Add Exercise</v-btn>
 
@@ -34,7 +34,6 @@
 import { ref } from 'vue'
 import AddExercise from '../components/AddExercise.vue';
 import Workout from '@/components/Workout.vue';
-
 
 const exerciseRef = ref(null);
 

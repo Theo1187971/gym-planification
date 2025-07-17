@@ -1,9 +1,9 @@
 <template>
     <tr :key="set.set_id">
-        <td>{{ set.set_type }}</td>
+        <td>{{ set.setType.name }}</td>
         <td>{{ set.note || '-' }}</td>
-        <td>{{ set.repetitions }}</td>
-        <td>{{ set.weight }}</td>
+        <td>{{ set.weightSet.repetitions }}</td>
+        <td>{{ set.weightSet.weight }}</td>
     </tr>
 </template>
 

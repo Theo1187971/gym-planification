@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('User', {
+    const User = sequelize.define('User', {
         user_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -34,4 +34,10 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'users',
         timestamps: false,
     });
+    User.associate = (models) => {
+        User.hasMany(models.ExerciseDef, {
+        foreignKey: "user_id",
+        });
+    };
+    return User;
 };

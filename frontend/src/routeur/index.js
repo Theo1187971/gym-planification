@@ -13,7 +13,8 @@ const routes = [
     {
         path: '/dashboard',
         name: 'Dashboard',
-        component: MainPage
+        component: MainPage,
+        meta: {requiresAuth: true}
     },
     {
         path: '/login',
@@ -35,6 +36,17 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes
+});
+
+router.beforeEach((to, from, next) => {
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    const isAuthenticated = !!localStorage.getItem('session_token');
+
+    if (requiresAuth && !isAuthenticated) {
+        next('/login');
+    } else {
+        next();
+    }
 });
 
 export default router;

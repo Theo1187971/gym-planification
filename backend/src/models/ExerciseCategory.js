@@ -1,28 +1,25 @@
-const { Model, DataTypes } = require('sequelize');
 
-module.exports = (sequelize) => {
-    class ExerciseCategory extends Model {
-        static associate(models) {
-            ExerciseCategory.hasMany(models.ExerciseDef, {
-                foreignKey: 'exercise_category_id',
-            });
-        }
+module.exports = (sequelize, DataTypes) => {
+  const ExerciseCategory = sequelize.define('ExerciseCategory', {
+    exercise_category_id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    name: {
+      type: DataTypes.TEXT,
+      allowNull: false
     }
+  }, {
+    tableName: 'exercise_categories',
+    timestamps: false
+  });
 
-    ExerciseCategory.init({
-        exercise_category_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        name: DataTypes.TEXT,
-    }, {
-        sequelize,
-        modelName: 'ExerciseCategory',
-        tableName: 'exercise_categories',
-        timestamps: false,
+  ExerciseCategory.associate = (models) => {
+    ExerciseCategory.hasMany(models.ExerciseDef, {
+      foreignKey: 'exercise_category_id'
     });
+  };
 
-    return ExerciseCategory;
+  return ExerciseCategory;
 };
-

@@ -1,5 +1,6 @@
+    <template>
+        <Workout :workout="workout"></Workout>
 
-<template>
     <v-container class="py-8">
         <v-btn color="orange-darken-2" text @click="addExercise()">Add Exercise</v-btn>
 
@@ -31,9 +32,29 @@
 
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue';
 import AddExercise from '../components/AddExercise.vue';
 import Workout from '@/components/Workout.vue';
+
+const workout = ref(null);
+
+onMounted(() => {
+  fetch(`http://localhost:3000/api/workout/4`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      workout.value = data;
+    })
+    .catch(error => {
+      console.error('Fetching error:', error);
+    });
+});
+
 
 const exerciseRef = ref(null);
 

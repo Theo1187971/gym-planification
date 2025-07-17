@@ -22,11 +22,19 @@ CREATE TABLE workouts
     FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
-CREATE TABLE exercises_def
-(
+CREATE TABLE exercise_categories (
+    exercise_category_id INT PRIMARY KEY AUTO_INCREMENT,
+    name TEXT
+);
+ 
+CREATE TABLE exercises_def (
     exercise_def_id INT PRIMARY KEY AUTO_INCREMENT,
-    name            VARCHAR(100),
-    description     TEXT
+    name TEXT,
+    description TEXT,
+    exercise_category_id INT,
+    user_id INT,
+    FOREIGN KEY (exercise_category_id) REFERENCES exercise_categories(exercise_category_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE body_parts

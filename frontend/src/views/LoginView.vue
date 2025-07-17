@@ -139,6 +139,7 @@ export default {
           this.errorMessage = data.message;
         } else {
           this.errorMessage = '';
+          localStorage.setItem('session_token', data.session_token);
           this.$router.push('/dashboard');
         }
       } catch (error) {

@@ -1,6 +1,6 @@
 const {Sequelize, DataTypes} = require('sequelize');
 
-const sequelize = new Sequelize('gymplanification', 'root', '', {
+const sequelize = new Sequelize('gymplanification', 'root', 'root', {
     host: 'localhost',
     dialect: 'mysql'
 });
@@ -16,6 +16,14 @@ db.sequelize = sequelize;
 db.User = require('../models/Users')(sequelize, DataTypes);
 db.BodyPart = require('../models/BodyPart')(sequelize, DataTypes);
 db.ExerciseDef = require('../models/ExerciseDef')(sequelize, DataTypes);
-db.ExercisesBodyParts = require('../models/ExercisesBodyPart')(sequelize, DataTypes);
+db.ExercisesBodyParts = require('../models/ExercisesBodyParts')(sequelize, DataTypes);
+db.ExerciseCategory = require('../models/ExerciseCategory')(sequelize, DataTypes);
+
+// Associations
+Object.values(db).forEach(model => {
+  if (model.associate) {
+    model.associate(db);
+  }
+});
 
 module.exports = db;

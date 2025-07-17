@@ -4,6 +4,7 @@ const User = db.User;
 const BodyPart = db.BodyPart;
 const ExerciseDef = db.ExerciseDef;
 const ExercisesBodyParts = db.ExercisesBodyParts;
+const ExerciseCategory = db.ExerciseCategory;
 
 exports.createExercises = async (req, res) => {
   const { exercises, userId } = req.body;
@@ -28,7 +29,7 @@ exports.createExercises = async (req, res) => {
     };
 
     for (const ex of exercises) {
-      const { name, description, bodyParts } = ex;
+      const { name, description, bodyParts, categoryName } = ex;
 
       const existingExercise = await ExerciseDef.findOne({
         where: { name }
@@ -53,11 +54,22 @@ exports.createExercises = async (req, res) => {
           continue;
         }
 
+        const foundExerciseCategory = await ExerciseCategory.findOne({
+            where: { name : categoryName }
+        });
+
+        if(!foundExerciseCategory) {
+            results.skipped.push({ name, reason: "Category doesn't exist" });
+            continue;
+        }
+
         // Exercise creation
         const newExercise = await ExerciseDef.create({
           name,
           description,
+          exercise_category_id: foundExerciseCategory.exercise_category_id,
           user_id: userId
+
         });
 
         // Associations creation
@@ -83,6 +95,6 @@ exports.createExercises = async (req, res) => {
     });
   } catch (error) {
     console.error("Global error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ error: error,message: "Internal server error" });
   }
 };

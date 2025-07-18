@@ -3,6 +3,7 @@ const Exercise = db.Exercise;
 const ExerciseCategory = db.ExerciseCategory;
 const ExerciseDef = db.ExerciseDef
 const Workout = db.Workout;
+const Session = db.Session;
 
 
 exports.getAllGymExercises = async (req, res) => {
@@ -37,16 +38,33 @@ exports.getAllGymExercises = async (req, res) => {
 };
 
 exports.createWorkoutWithExercises = async (req, res) => {
-    const { name, note, sportChoice, exercises } = req.body;
+    const { name, note, sportChoice, exercises, sessionId } = req.body;
+
+    if (!sessionId) {
+        return res.status(400).json({ error: 'Session ID is required' });
+    }
 
     try {
+        // Vérifie que la session existe et récupère le user_id
+        const existingSession = await Session.findOne({
+            where: { session_id: sessionId }
+        });
+
+        if (!existingSession) {
+            return res.status(400).json({ error: "Invalid session ID" });
+        }
+
+        const userId = existingSession.user_id;
+
+        // Création du workout
         const workout = await Workout.create({
             name,
             note,
             sport: sportChoice,
-            user_id: 1
+            user_id: userId
         });
 
+        // Création des exercices associés au workout
         for (const ex of exercises) {
             const exerciseDef = await ExerciseDef.findOne({ where: { name: ex.name } });
 
@@ -71,6 +89,7 @@ exports.createWorkoutWithExercises = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 
 

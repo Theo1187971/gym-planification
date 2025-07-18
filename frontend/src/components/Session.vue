@@ -131,13 +131,17 @@
 </template>
 
 <script setup>
+import getSessionToken from '@/utils/auth'
 import { ref, onMounted } from 'vue'
+// ⚠️ Décommenter si tu veux naviguer en cas de token manquant
+// import { useRouter } from 'vue-router'
+// const router = useRouter()
 
 const SessionName = ref('')
 const SessionDesc = ref('')
 const SessionList = ref([])
 
-const sportChoiceList = ["Fitness", "Biking", "Running", "Swimming"]
+const sportChoiceList = ['Fitness', 'Biking', 'Running', 'Swimming']
 const sportChoice = ref('')
 const exercisesChoiceList = ref([])
 const exerciseChoice = ref('')
@@ -147,6 +151,7 @@ const intervals = ref([])
 
 const dialog = ref(false)
 const SessionToDeleteIndex = ref(null)
+const dialogAddSession = ref(false) // ✅ ajouté pour corriger l'erreur
 
 function addExercise() {
   exercises.value.push({ name: '', weight: 0, reps: 10, sets: 3 })
@@ -166,8 +171,8 @@ async function addSession() {
   }
 
   if (sportChoice.value === 'Fitness') {
-    sessionData.exercises = [...exercises.value];
-    await sendSessionToDatabase(sessionData);
+    sessionData.exercises = [...exercises.value]
+    await sendSessionToDatabase(sessionData)
   } else if (['Running', 'Biking', 'Swimming'].includes(sportChoice.value)) {
     sessionData.intervals = [...intervals.value]
   }
@@ -213,22 +218,63 @@ onMounted(() => {
   fetchExercises()
 })
 
-async function sendSessionToDatabase(session) {
-  try {
-    const response = await fetch('http://localhost:3000/api/addFitnessSession', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(session)
-    });
+async function sendSessionToDatabase(sessionData) {
+  const userToken = getSessionToken()
 
-    if (!response.ok) throw new Error('Failed to save workout');
-    console.log('Workout saved successfully');
-  } catch (error) {
-    console.error('Error sending session to DB:', error);
+  if (userToken !== null) {
+    if (sessionData && sessionData.exercises && sessionData.exercises.length > 0) {
+      const payload = {
+        sessionId: userToken,
+        name: sessionData.name,
+        note: sessionData.description,
+        sportChoice: sessionData.sportChoice,
+        exercises: sessionData.exercises.map(ex => ({
+          name: ex.name,
+          sets: [
+            {
+              set_type: 'standard',
+              repetitions: ex.reps,
+              duration: null,
+              rest_time: null,
+              weight: ex.weight
+            }
+          ]
+        }))
+      }
+
+      console.log('Sending session payload:', payload)
+
+      try {
+        const response = await fetch('http://localhost:3000/api/addFitnessSession', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        })
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        const result = await response.json()
+        console.log('Session saved successfully:', result)
+      } catch (error) {
+        console.error('Error while saving session:', error)
+      }
+    } else {
+      console.warn('No exercises to save in session')
+    }
+  } else {
+    alert('Session expirée. Veuillez vous reconnecter.')
+    // router.push('/login')
   }
+
+  dialogAddSession.value = false
 }
 
 defineExpose({
   SessionList
 })
 </script>
+

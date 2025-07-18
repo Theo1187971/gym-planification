@@ -1,8 +1,8 @@
     <template>
         <Workout v-for="workout in workouts" :workout="workout"></Workout>
+        <SessionCreation></SessionCreation>
 
-    <SessionCreation></SessionCreation>
-
+        
     <v-container class="py-8">
         <v-btn color="orange-darken-2" text @click="addExercise()">Add Exercise</v-btn>
 

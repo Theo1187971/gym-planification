@@ -1,8 +1,9 @@
 import {createRouter, createWebHistory} from "vue-router";
 import SignUpView from "@/views/SignUpView.vue";
 import LoginView from "@/views/LoginView.vue";
-import MainPage from "@/views/MainPage.vue";
+import MainPage from "@/views/MainPageView.vue";
 import SessionCreation from "@/components/SessionCreation.vue";
+import AboutUsView from "@/views/AboutUsView.vue";
 
 
 const routes = [
@@ -15,6 +16,11 @@ const routes = [
         name: 'Dashboard',
         component: MainPage,
         meta: {requiresAuth: true}
+    },
+    {
+        path: '/about-us',
+        name: 'AboutUs',
+        component: AboutUsView
     },
     {
         path: '/login',

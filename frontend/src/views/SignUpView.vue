@@ -111,6 +111,10 @@
         <div class="text-center mt-4" id="backToLoginLink">
           <router-link to="/login">← Back to login</router-link>
         </div>
+        <div class="text-center mt-4 link">
+          More about us?
+          <router-link to="/about-us" class="link-a">About us</router-link>
+        </div>
       </v-form>
     </v-card>
   </v-container>
@@ -204,6 +208,16 @@ export default {
 }
 
 #backToLoginLink a {
+  text-decoration: none;
+  color: #1976d2;
+}
+
+.createAccountLink {
+  font-size: 90%;
+  margin-top: 2%;
+}
+
+.link-a {
   text-decoration: none;
   color: #1976d2;
 }

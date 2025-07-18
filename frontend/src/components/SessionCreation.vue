@@ -6,7 +6,6 @@
 
     <v-dialog v-model="dialogAddSession" max-width="600">
       <v-card>
-        <!-- Barre du haut avec bouton X -->
         <v-card-title class="d-flex justify-space-between align-center">
           <span></span>
           <v-btn icon variant="text" @click="cancelAddSession()">
@@ -14,12 +13,10 @@
           </v-btn>
         </v-card-title>
 
-        <!-- Composant Session -->
         <v-card-text>
           <Session ref="SessionRef"/>
         </v-card-text>
 
-        <!-- Boutons d'action -->
         <v-card-actions class="d-flex justify-center" style="gap: 16px; padding-bottom: 24px;">
           <v-btn color="grey"
                  style="height: 48px; min-width: 120px; font-size: 16px;" text @click="cancelAddSession()">Cancel

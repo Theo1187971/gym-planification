@@ -1,7 +1,9 @@
 # Node.js
 /backend/node_modules
 /backend/.env
+/backend/package-lock.json
 
 # Vue.js
 /frontend/node_modules
 /dist
+/frontend/package-lock.json

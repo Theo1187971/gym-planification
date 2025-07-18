@@ -18,7 +18,7 @@ db.sequelize = sequelize;
 db.User = require('../models/Users')(sequelize, DataTypes);
 db.BodyPart = require('../models/BodyPart')(sequelize, DataTypes);
 db.ExerciseDef = require('../models/ExerciseDef')(sequelize, DataTypes);
-db.ExercisesBodyParts = require('../models/ExercisesBodyParts')(sequelize, DataTypes);
+db.ExercisesBodyParts = require('../models/ExercisesBodyPart')(sequelize, DataTypes);
 db.ExerciseCategory = require('../models/ExerciseCategory')(sequelize, DataTypes);
 db.Exercise = require('../models/Exercise')(sequelize, DataTypes);
 db.Workout = require('../models/Workout')(sequelize, DataTypes);
@@ -26,12 +26,13 @@ db.Set = require('../models/Set')(sequelize, DataTypes);
 db.WeightSet = require('../models/WeightSet')(sequelize, DataTypes);
 db.TimeSet = require('../models/TimeSet')(sequelize, DataTypes);
 db.SetType = require('../models/SetType')(sequelize, DataTypes);
+db.Session = require('../models/Session')(sequelize, DataTypes);
 
 // Associations
 Object.values(db).forEach(model => {
-  if (model.associate) {
-    model.associate(db);
-  }
+    if (model.associate) {
+        model.associate(db);
+    }
 });
 
 

@@ -27,25 +27,25 @@
           </div>
 
           <div v-if="session.sportChoice === 'Fitness'" class="text-body-2">
-            <strong>Exercices:</strong>
+            <strong>Exercises:</strong>
             <ul class="pl-4">
               <li
                   v-for="(e, i) in session.exercises"
                   :key="i"
               >
-                {{ e.name }} – {{ e.weight }}kg × {{ e.reps }} reps × {{ e.sets }} séries
+                {{ e.name }} – {{ e.weight }}kg × {{ e.reps }} reps × {{ e.sets }} sets
               </li>
             </ul>
           </div>
 
           <div v-if="['Running', 'Biking', 'Swimming'].includes(session.sportChoice)" class="text-body-2">
-            <strong>Intervalles:</strong>
+            <strong>Intervals:</strong>
             <ul class="pl-4">
               <li
                   v-for="(i, idx) in session.intervals"
                   :key="idx"
               >
-                {{ i.duration }} min à allure {{ i.pace }}
+                {{ i.duration }} min at {{ i.pace }}
               </li>
             </ul>
           </div>

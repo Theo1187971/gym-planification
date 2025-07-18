@@ -74,9 +74,13 @@
           {{ errorMessage }}
         </v-alert>
 
-        <div class="text-center mt-4" id="createAccountLink">
+        <div class="text-center mt-4 link">
           Not registered yet?
-          <router-link to="/signup">Create your locker by clicking here</router-link>
+          <router-link to="/signup" class="link-a">Create your locker by clicking here</router-link>
+        </div>
+        <div class="text-center mt-4 link">
+          More about us?
+          <router-link to="/about-us" class="link-a">About us</router-link>
         </div>
       </v-form>
     </v-card>
@@ -156,16 +160,16 @@ export default {
   text-align: center;
 }
 
-#createAccountLink {
-  font-size: 90%;
-  margin-top: 2%;
-}
-
 .login-container {
   margin-top: 50px;
 }
 
-#createAccountLink a {
+.createAccountLink {
+  font-size: 90%;
+  margin-top: 2%;
+}
+
+.link-a {
   text-decoration: none;
   color: #1976d2;
 }

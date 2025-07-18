@@ -1,6 +1,11 @@
-    <template>
-        <Workout v-for="workout in workouts" :workout="workout"></Workout>
-        <SessionCreation></SessionCreation>
+<template>
+    <router-link to="/my-account" class="link-a">My account</router-link><br><br>
+
+    <h1>Welcome, Matheo !</h1>
+    <br><br>
+
+    <Workout v-for="workout in workouts" :workout="workout"></Workout>
+    <SessionCreation></SessionCreation>
 
         
     <v-container class="py-8">

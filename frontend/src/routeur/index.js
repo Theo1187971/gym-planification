@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from "vue-router";
 import SignUpView from "@/views/SignUpView.vue";
 import LoginView from "@/views/LoginView.vue";
 import MainPage from "@/views/MainPage.vue";
+import AccountView from "@/views/AccountView.vue";
 
 const routes = [
     {
@@ -12,6 +13,12 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: MainPage,
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/my-account',
+        name: 'My Account',
+        component: AccountView,
         meta: {requiresAuth: true}
     },
     {

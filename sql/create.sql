@@ -10,7 +10,8 @@ CREATE TABLE users
     first_name VARCHAR(50),
     last_name  VARCHAR(50),
     mail       VARCHAR(100),
-    password   VARCHAR(255)
+    password   VARCHAR(255),
+    avatar_url   VARCHAR(255)
 );
 
 CREATE TABLE workouts

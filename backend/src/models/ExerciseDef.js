@@ -10,7 +10,8 @@ module.exports = (sequelize) => {
                 otherKey: 'body_part_id',
             });
             ExerciseDef.belongsTo(models.ExerciseCategory, {
-                foreignKey: 'exercise_category_id'
+                foreignKey: 'exercise_category_id',
+                as: "exerciseCategory"
             });
         }
     }

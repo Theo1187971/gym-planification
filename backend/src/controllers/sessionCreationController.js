@@ -4,31 +4,26 @@ const ExerciseCategory = db.ExerciseCategory;
 const ExerciseDef = db.ExerciseDef
 const Workout = db.Workout;
 const Session = db.Session;
+const WeightSet = db.WeightSet;
+const Set = db.Set;
 
 
 exports.getAllGymExercises = async (req, res) => {
     try {
-        const exercises = await Exercise.findAll({
+        const exercises = await ExerciseDef.findAll({
             include: [
                 {
-                    model: ExerciseDef,
-                    as: 'exerciseDefinition',
-                    include: [
-                        {
-                            model: ExerciseCategory,
-                            where: { name: 'Weight exercise' },
-                            attributes: []
-                        }
-                    ],
-                    attributes: ['name']
+                    model: ExerciseCategory,
+                    as: "exerciseCategory",
+                    where: { name: 'Weight exercise' },
+                    attributes: []
                 }
             ],
-            attributes: []
+            attributes: ['name']
         });
 
         const exerciseNames = exercises
-            .filter(e => e.exerciseDefinition && e.exerciseDefinition.name)
-            .map(e => e.exerciseDefinition.name);
+            .map(e => e.name);
 
         res.status(200).json(exerciseNames);
     } catch (error) {
@@ -73,13 +68,26 @@ exports.createWorkoutWithExercises = async (req, res) => {
                 continue;
             }
 
-            await Exercise.create({
+            const createdExercise = await Exercise.create({
                 workout_id: workout.workout_id,
                 exercise_def_id: exerciseDef.exercise_def_id,
-                sets: ex.sets,
-                reps: ex.reps,
-                weight: ex.weight
             });
+
+            for (const set of ex.sets) {
+                const createdSet = await Set.create({
+                    set_type_id: 3,
+                    exercise_id: createdExercise.exercise_id
+                });
+
+                res.status(201).json({message: createdSet});
+                console.log("efhzgiuhzeiurhgierziguherigiheruhgeriughergiuerhguhheiu");
+                console.log(createdSet);
+                await WeightSet.create({
+                    set_id: createdSet.set_id,
+                    repetitions: set.repetitions,
+                    weight: set.weight
+                })
+            }
         }
 
         res.status(201).json({ message: 'Workout created successfully' });

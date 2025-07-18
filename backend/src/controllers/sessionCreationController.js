@@ -76,7 +76,6 @@ exports.createWorkoutWithExercises = async (req, res) => {
                     exercise_id: createdExercise.exercise_id
                 });
 
-                res.status(201).json({message: createdSet});
                 await WeightSet.create({
                     set_id: createdSet.set_id,
                     repetitions: set.repetitions,

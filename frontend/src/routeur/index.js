@@ -1,8 +1,10 @@
 import {createRouter, createWebHistory} from "vue-router";
 import SignUpView from "@/views/SignUpView.vue";
 import LoginView from "@/views/LoginView.vue";
-import MainPage from "@/views/MainPage.vue";
 import AccountView from "@/views/AccountView.vue";
+import MainPage from "@/views/MainPageView.vue";
+import SessionCreation from "@/components/SessionCreation.vue";
+import AboutUsView from "@/views/AboutUsView.vue";
 
 const routes = [
     {
@@ -22,6 +24,11 @@ const routes = [
         meta: {requiresAuth: true}
     },
     {
+        path: '/about-us',
+        name: 'AboutUs',
+        component: AboutUsView
+    },
+    {
         path: '/login',
         name: 'Login',
         component: LoginView
@@ -30,6 +37,11 @@ const routes = [
         path: '/signup',
         name: 'SignUp',
         component: SignUpView
+    },
+    {
+        path: '/sessionCreation',
+        name: 'sessionCreation',
+        component: SessionCreation
     }
 ];
 

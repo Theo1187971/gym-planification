@@ -18,10 +18,9 @@
             chips
         />
 
-        <!-- Muscu (Fitness) : Ajout d'exercices -->
         <div v-if="sportChoice === 'Fitness'" class="d-flex flex-column gap-4">
           <v-divider></v-divider>
-          <h3 class="text-subtitle-1 font-weight-bold text-blue-darken-2">💪 Exercices</h3>
+          <h3 class="text-subtitle-1 font-weight-bold text-blue-darken-2">💪 Exercises</h3>
 
           <div v-for="(ex, index) in exercises" :key="index" class="d-flex flex-wrap gap-4">
             <v-select
@@ -33,26 +32,25 @@
                 solo
                 chips
             />
-            <v-text-field v-model.number="ex.weight" label="Poids (kg)" type="number" color="blue" variant="outlined" class="w-32" />
-            <v-text-field v-model.number="ex.reps" label="Répétitions" type="number" color="blue" variant="outlined" class="w-32" />
-            <v-text-field v-model.number="ex.sets" label="Séries" type="number" color="blue" variant="outlined" class="w-32" />
+            <v-text-field v-model.number="ex.weight" label="Weight (kg)" type="number" color="blue" variant="outlined" class="w-32" />
+            <v-text-field v-model.number="ex.reps" label="Repetitions" type="number" color="blue" variant="outlined" class="w-32" />
+            <v-text-field v-model.number="ex.sets" label="Sets" type="number" color="blue" variant="outlined" class="w-32" />
           </div>
 
-          <v-btn @click="addExercise" color="blue-darken-2" variant="text">+ Ajouter un exercice</v-btn>
+          <v-btn @click="addExercise" color="blue-darken-2" variant="text">+ Add an exercise</v-btn>
         </div>
 
-        <!-- Autres sports : Ajout d'intervalles -->
         <div v-if="['Running', 'Biking', 'Swimming'].includes(sportChoice)" class="d-flex flex-column gap-4">
           <v-divider></v-divider>
-          <h3 class="text-subtitle-1 font-weight-bold text-orange-darken-3">🏃‍♂️ Intervalles</h3>
+          <h3 class="text-subtitle-1 font-weight-bold text-orange-darken-3">🏃‍♂️ Intervals</h3>
 
           <div v-for="(interval, index) in intervals" :key="index" class="d-flex flex-wrap gap-4">
 
-            <v-text-field v-model="interval.duration" label="Durée (min)" type="number" color="orange" variant="outlined" class="w-32" />
-            <v-text-field v-model="interval.pace" label="Allure" color="orange" variant="outlined" class="flex-1" />
+            <v-text-field v-model="interval.duration" label="Duration (min)" type="number" color="orange" variant="outlined" class="w-32" />
+            <v-text-field v-model="interval.pace" label="Pace" color="orange" variant="outlined" class="flex-1" />
           </div>
 
-          <v-btn @click="addInterval" color="orange-darken-2" variant="text">+ Ajouter un intervalle</v-btn>
+          <v-btn @click="addInterval" color="orange-darken-2" variant="text">+ Add an interval</v-btn>
         </div>
 
         <v-btn
@@ -68,7 +66,6 @@
       </v-form>
     </v-card>
 
-    <!-- Liste des sessions -->
     <v-card
         v-if="SessionList.length"
         class="mt-10 pa-6 rounded-xl"
@@ -92,19 +89,19 @@
             </div>
 
             <div v-if="ex.sportChoice === 'Fitness'" class="text-body-2">
-              <strong>Exercices:</strong>
+              <strong>Exercises:</strong>
               <ul class="pl-4">
                 <li v-for="(e, i) in ex.exercises" :key="i">
-                  {{ e.name }} – {{ e.weight }}kg × {{ e.reps }} reps × {{ e.sets }} séries
+                  {{ e.name }} – {{ e.weight }}kg × {{ e.reps }} reps × {{ e.sets }} sets
                 </li>
               </ul>
             </div>
 
             <div v-if="['Running', 'Biking', 'Swimming'].includes(ex.sportChoice)" class="text-body-2">
-              <strong>Intervalles:</strong>
+              <strong>Intervals:</strong>
               <ul class="pl-4">
                 <li v-for="(i, idx) in ex.intervals" :key="idx">
-                  {{ i.duration }} min à allure {{ i.pace }}
+                  {{ i.duration }} min at {{ i.pace }}
                 </li>
               </ul>
             </div>
@@ -115,7 +112,6 @@
       </v-list>
     </v-card>
 
-    <!-- Confirmation de suppression -->
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
         <v-card-title class="text-h6">Confirm deleting</v-card-title>
@@ -133,9 +129,6 @@
 <script setup>
 import getSessionToken from '@/utils/auth'
 import { ref, onMounted } from 'vue'
-// ⚠️ Décommenter si tu veux naviguer en cas de token manquant
-// import { useRouter } from 'vue-router'
-// const router = useRouter()
 
 const SessionName = ref('')
 const SessionDesc = ref('')
@@ -151,7 +144,7 @@ const intervals = ref([])
 
 const dialog = ref(false)
 const SessionToDeleteIndex = ref(null)
-const dialogAddSession = ref(false) // ✅ ajouté pour corriger l'erreur
+const dialogAddSession = ref(false)
 
 function addExercise() {
   exercises.value.push({ name: '', weight: 0, reps: 10, sets: 3 })
@@ -210,7 +203,7 @@ async function fetchExercises() {
     const data = await response.json()
     exercisesChoiceList.value = data
   } catch (error) {
-    console.error('Erreur lors du chargement des exercices :', error)
+    console.error('Error while loading exercises :', error)
   }
 }
 
@@ -266,8 +259,7 @@ async function sendSessionToDatabase(sessionData) {
       console.warn('No exercises to save in session')
     }
   } else {
-    alert('Session expirée. Veuillez vous reconnecter.')
-    // router.push('/login')
+    alert('Session expired. Please reconnect')
   }
 
   dialogAddSession.value = false

@@ -9,7 +9,7 @@ VALUES ('UserTest', 'John', 'Doe', 'user@test.com',
         'acfd4c67e24dc5084587daad9425c652a4a03c113c706d4ed80f062152bcb083');    #Matheo!123
 
 INSERT INTO workouts (name, note, user_id)
-VALUES ('Push', 'Monday Push Workout', 1),
+VALUES ('Push', 'Monday Push Workout', 3),
        ('Pull', NULL, 2),
        ('Legs', 'Boring leg day', 1),
        ('Cardio', 'Easy endurance day', 2);

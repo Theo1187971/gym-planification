@@ -80,8 +80,6 @@ exports.createWorkoutWithExercises = async (req, res) => {
                 });
 
                 res.status(201).json({message: createdSet});
-                console.log("efhzgiuhzeiurhgierziguherigiheruhgeriughergiuerhguhheiu");
-                console.log(createdSet);
                 await WeightSet.create({
                     set_id: createdSet.set_id,
                     repetitions: set.repetitions,

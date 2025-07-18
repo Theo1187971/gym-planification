@@ -79,6 +79,7 @@ exports.getWorkouts = async (req, res) => {
                 {
                     model: Exercise,
                     as: 'exercises',
+                    order: [["order_nr", "DESC"]],
                     include: [
                         {
                             model: ExerciseDef,

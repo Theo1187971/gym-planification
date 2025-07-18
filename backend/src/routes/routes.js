@@ -15,6 +15,7 @@ router.post('/createExercises', exerciseController.createExercises);
 router.get("/workout/:workout_id", workoutController.getWorkout);
 router.post('/my-account', accountController.getMyAccount);
 router.put('/my-account/update', upload.single('avatar'), accountController.updateMyAccount);
+router.delete('/my-account/delete', accountController.deleteAccount);
 router.get('/exercises', sessionController.getAllGymExercises);
 router.post('/addFitnessSession', sessionController.createWorkoutWithExercises);
 router.get('/workout/:workout_id', workoutController.getWorkout);

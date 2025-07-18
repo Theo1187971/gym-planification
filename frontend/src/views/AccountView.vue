@@ -12,7 +12,7 @@
               <template v-if="preview">
                 <v-img :src="preview" cover/>
               </template>
-              <template v-else-if="user.avatar_url != null">
+              <template v-else-if="user && user.avatar_url">
                 <v-img :src="`http://localhost:3000/backend${user.avatar_url}`" cover/>
               </template>
               <template v-else>
@@ -59,28 +59,41 @@
                 </v-btn>
               </v-list-item-action>
             </v-list-item-content>
-
           </v-list-item>
         </v-list>
 
-        <v-btn
-            type="submit"
-            color="success"
-            block
-            class="mt-4"
-            @click="updateAccount"
-        >
-          Save Changes
-        </v-btn>
+        <v-slide-y-transition>
+          <div>
+            <v-btn
+                color="success"
+                block
+                class="mt-4"
+                @click="updateAccount"
+            >
+              Save Changes
+            </v-btn>
 
-        <v-btn
-            color="error"
-            block
-            class="mt-2"
-            @click="resetChanges"
+            <v-btn
+                color="error"
+                block
+                class="mt-2"
+                @click="resetChanges"
+            >
+              Cancel
+            </v-btn>
+          </div>
+        </v-slide-y-transition>
+
+        <v-alert
+            v-if="successMessage"
+            type="success"
+            dense
+            class="mt-3"
+            border="start"
+            variant="tonal"
         >
-          Cancel
-        </v-btn>
+          {{ successMessage }}
+        </v-alert>
       </v-card-text>
 
       <v-card-text v-else>
@@ -103,12 +116,39 @@
         {{ errorMessage }}
       </v-alert>
 
+      <v-btn
+          @click="confirmDelete"
+          color="red-darken-3"
+          variant="outlined"
+          class="mt-5"
+          block
+      >
+        Delete Account
+      </v-btn>
+
       <div class="text-center mt-4" id="backLink">
         <router-link to="/dashboard">Back to Dashboard</router-link>
       </div>
     </v-card>
   </v-container>
 </template>
+
+<script setup>
+import {ref} from 'vue'
+
+const preview = ref(null)
+
+function onFileChange(e) {
+  const file = e.target.files[0]
+  if (file) {
+    const reader = new FileReader()
+    reader.onload = () => {
+      preview.value = reader.result
+    }
+    reader.readAsDataURL(file)
+  }
+}
+</script>
 
 <script>
 export default {
@@ -128,6 +168,7 @@ export default {
         {key: 'mail', label: 'Email'}
       ],
       errorMessage: '',
+      successMessage: '',
     };
   },
   async mounted() {
@@ -149,7 +190,7 @@ export default {
           this.errorMessage = data.message || 'Unable to fetch account information.';
         } else {
           this.user = {...data};
-          this.originalUser = JSON.parse(JSON.stringify(data)); // deep clone
+          this.originalUser = JSON.parse(JSON.stringify(data));
         }
       } catch (error) {
         console.error('Error fetching user info:', error);
@@ -164,6 +205,7 @@ export default {
         mail: false
       };
       this.preview = null;
+      this.successMessage = '';
     },
     logout() {
       localStorage.removeItem('session_token');
@@ -198,6 +240,7 @@ export default {
           this.errorMessage = data.message || 'Update failed.';
         } else {
           this.errorMessage = '';
+          this.successMessage = 'Account successfully updated.';
           this.editFields = {
             first_name: false,
             last_name: false,
@@ -209,26 +252,34 @@ export default {
         console.error(err);
         this.errorMessage = 'Server error during update.';
       }
+    },
+    async confirmDelete() {
+      const confirmed = confirm('Are you sure you want to delete your account? This action cannot be undone.');
+      if (!confirmed) return;
+
+      try {
+        const token = localStorage.getItem('session_token');
+        const response = await fetch('http://localhost:3000/api/my-account/delete', {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          this.errorMessage = data.message || 'Failed to delete account.';
+        } else {
+          localStorage.removeItem('session_token');
+          this.$router.push('/signup');
+        }
+      } catch (error) {
+        console.error('Error deleting account:', error);
+        this.errorMessage = 'Server error during account deletion.';
+      }
     }
   }
 };
-</script>
-
-<script setup>
-import {ref} from 'vue'
-
-const preview = ref(null)
-
-function onFileChange(e) {
-  const file = e.target.files[0]
-  if (file) {
-    const reader = new FileReader()
-    reader.onload = () => {
-      preview.value = reader.result
-    }
-    reader.readAsDataURL(file)
-  }
-}
 </script>
 
 <style scoped>
@@ -249,5 +300,4 @@ function onFileChange(e) {
   text-decoration: none;
   color: #1976d2;
 }
-
 </style>

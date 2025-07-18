@@ -18,7 +18,6 @@
             chips
         />
 
-        <!-- Muscu (Fitness) : Ajout d'exercices -->
         <div v-if="sportChoice === 'Fitness'" class="d-flex flex-column gap-4">
           <v-divider></v-divider>
           <h3 class="text-subtitle-1 font-weight-bold text-blue-darken-2">💪 Exercises</h3>
@@ -115,7 +114,6 @@
       </v-list>
     </v-card>
 
-    <!-- Confirmation de suppression -->
     <v-dialog v-model="dialog" max-width="400">
       <v-card>
         <v-card-title class="text-h6">Confirm deleting</v-card-title>

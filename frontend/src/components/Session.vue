@@ -40,7 +40,6 @@
           <v-btn @click="addExercise" color="blue-darken-2" variant="text">+ Add an exercise</v-btn>
         </div>
 
-        <!-- Autres sports : Ajout d'intervalles -->
         <div v-if="['Running', 'Biking', 'Swimming'].includes(sportChoice)" class="d-flex flex-column gap-4">
           <v-divider></v-divider>
           <h3 class="text-subtitle-1 font-weight-bold text-orange-darken-3">🏃‍♂️ Intervals</h3>
@@ -67,7 +66,6 @@
       </v-form>
     </v-card>
 
-    <!-- Liste des sessions -->
     <v-card
         v-if="SessionList.length"
         class="mt-10 pa-6 rounded-xl"

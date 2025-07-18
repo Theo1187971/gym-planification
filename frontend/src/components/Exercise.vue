@@ -1,5 +1,5 @@
 <template>
-    <h1>{{ exercise.exerciseDefinition.name }}</h1>
+    <h2>{{ exercise.exerciseDefinition.name }}</h2>
     <p>{{ exercise.note }}</p>
 
     <v-table v-if="weightExercise">

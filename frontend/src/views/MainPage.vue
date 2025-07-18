@@ -1,5 +1,5 @@
     <template>
-        <Workout :workout="workout"></Workout>
+        <Workout v-for="workout in workouts" :workout="workout"></Workout>
 
     <v-container class="py-8">
         <v-btn color="orange-darken-2" text @click="addExercise()">Add Exercise</v-btn>
@@ -41,22 +41,28 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 
-const workout = ref(null);
+const workouts = ref(null);
 
 onMounted(() => {
-  fetch(`http://localhost:3000/api/workout/4`)
+    const token = localStorage.getItem("session_token")
+    fetch(`http://localhost:3000/api/user-workouts`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
     .then(response => {
       if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status}`);
+        throw new Error(`HTTP Error: ${response.status}`)
       }
       return response.json();
     })
     .then(data => {
-      console.log(data);
-      workout.value = data;
+      console.log(data)
+      workouts.value = data
     })
     .catch(error => {
-      console.error('Fetching error:', error);
+      console.error('Fetching error:', error)
     });
 });
 

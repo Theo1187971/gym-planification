@@ -40,7 +40,6 @@ exports.createWorkoutWithExercises = async (req, res) => {
     }
 
     try {
-        // Vérifie que la session existe et récupère le user_id
         const existingSession = await Session.findOne({
             where: { session_id: sessionId }
         });
@@ -51,7 +50,6 @@ exports.createWorkoutWithExercises = async (req, res) => {
 
         const userId = existingSession.user_id;
 
-        // Création du workout
         const workout = await Workout.create({
             name,
             note,
@@ -59,7 +57,6 @@ exports.createWorkoutWithExercises = async (req, res) => {
             user_id: userId
         });
 
-        // Création des exercices associés au workout
         for (const ex of exercises) {
             const exerciseDef = await ExerciseDef.findOne({ where: { name: ex.name } });
 
